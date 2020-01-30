@@ -39,9 +39,25 @@ Airplane.prototype.land = function () {
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
-
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
 }
+
+Person.prototype.eat = function(someFood) {
+  if (this.stomach.length < 10) {
+    return this.stomach.push(someFood);
+  }
+};
+
+Person.prototype.poop = function() {
+  return (this.stomach.length = 0);
+};
+
+Person.prototype.toString = function() {
+  return `${this.name}, ${this.age}`;
+};
 
 /*
   TASK 2
@@ -57,9 +73,31 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-
+function Car(model, milesPerGallon) {
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
+  this.tank = 0;
+  this.odometer = 0;
 }
+
+Car.prototype.fill = function(gallons) {
+  return (this.tank += gallons);
+};
+
+Car.prototype.drive = function(distance) {
+  this.odometer += distance;
+  
+  let driveableMiles = this.milesPerGallon * this.tank;
+  if (driveableMiles < this.odometer) {
+    this.odometer = this.odometer - driveableMiles;
+    return `I ran out of fuel at ${this.odometer} miles!`;
+  } else if (this.odometer < driveableMiles){
+    // odo = 50 dM = 100 then we have 50 dM left // tank needs to reflect this amount
+    
+  }
+
+  this.tank = this.tank - (distance / this.milesPerGallon);  
+};
 
 /*
   TASK 3
@@ -68,8 +106,15 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
 
+function Baby(name, age, favoriteToy) {
+  Person.call(this, name, age);
+  this.favoriteToy = favoriteToy;
+}
+
+Baby.prototype = Object.create(Person.prototype); // allows Baby to inherit all Person prototypes
+Baby.prototype.play = function(){
+  return `Playing with ${this.favoriteToy}`
 }
 
 /* 
