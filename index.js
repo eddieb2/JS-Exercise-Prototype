@@ -85,18 +85,29 @@ Car.prototype.fill = function(gallons) {
 };
 
 Car.prototype.drive = function(distance) {
+  // incrementing the odometer to reflect the desired distance TO travel
   this.odometer += distance;
-  
+  // gallons of gas used for the desired distance TO travel 
+  // changed this.tank out with gallonsUsed 
+  let gallonsUsed = this.tank - (distance / this.milesPerGallon);  
+  // total miles we can drive based on how many gallons were put into the tank
   let driveableMiles = this.milesPerGallon * this.tank;
-  if (driveableMiles < this.odometer) {
-    this.odometer = this.odometer - driveableMiles;
-    return `I ran out of fuel at ${this.odometer} miles!`;
-  } else if (this.odometer < driveableMiles){
-    // odo = 50 dM = 100 then we have 50 dM left // tank needs to reflect this amount
-    
-  }
 
-  this.tank = this.tank - (distance / this.milesPerGallon);  
+  if (this.odometer > driveableMiles) {
+    // WHEN ODO > DRIVEABLE MILES WE RAN OUT OF GAS AT X MILES
+    this.odometer = driveableMiles;
+    this.tank = 0;
+    return `I ran out of fuel at ${this.odometer} miles!`;
+  } else if (this.odometer === driveableMiles){
+   // when ODO === DRIVEABLE MILES WE RAN OUT OF GAS AT 0 MILES
+    this.tank = 0;
+    return `We ran out of fuel at ${this.odometer} miles.`
+  } else {
+    // when ODO < DRIVEABLE MILES WE DIDNT RUN OUT OF GAS 
+    // odo = 50 && dM = 100 then we have 50 dM left // tank needs to reflect this amount
+    this.tank = this.tank - gallonsUsed;
+    return `We didn't run out of gas.`
+  }
 };
 
 /*
@@ -121,10 +132,10 @@ Baby.prototype.play = function(){
   TASK 4
 
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. Window Binding - When this is used in the global scope it's value will be the window
+  2. Implicit Binding - the object before .this is it's value
+  3. New Binding - this refers to the specific instance of the obj that is created and returned by the constructor function
+  4. Explicit Binding - JavaScript’s call or apply method, this is explicitly defined.
 */
 
 
